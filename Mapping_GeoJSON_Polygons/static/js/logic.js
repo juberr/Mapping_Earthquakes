@@ -1,6 +1,6 @@
 console.log("working");
 
-let airportData = "https://raw.githubusercontent.com/juberr/Mapping_Earthquakes/Mapping_GeoJSON_Points/majorAirports.json"
+let torontoHoods = "https://raw.githubusercontent.com/juberr/Mapping_Earthquakes/Mapping_GeoJSON_Polygons/torontoNeighborhoods.json"
 
 let line = [
   [37.6213, -122.3790],
@@ -18,33 +18,38 @@ attribution: 'Map data Â© <a href="https://www.openstreetmap.org/">OpenStreetM
     accessToken: API_KEY
 });
 
-let dark = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+let satelliteStreets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
 attribution: 'Map data Â© <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery (c) <a href="https://www.mapbox.com/">Mapbox</a>',
     maxZoom: 18,
-    id: "dark-v10",
+    id: "satellite-streets-v11",
     accessToken: API_KEY
 });
 
 let baseMaps = {
   Street: streets,
-  Dark: dark
+  "Satellite Streets": satelliteStreets
 };
 
 let map = L.map('mapid', {
-  center: [30, 30],
-  zoom: 2,
+  center: [43.7, -79.3],
+  zoom: 11,
   layers: [streets]
 })
 // Passing our map layers into layer control
 L.control.layers(baseMaps).addTo(map);
 
-d3.json(airportData).then(function(data) {
+let myStyle = {
+  weight: 1,
+  color: "blue",
+  fillColor: "yellow"
+}
+
+let onEachFeature = function(feature, layer) {
+  layer.bindPopup(`<h3> Neighborhood: ${feature.properties.AREA_NAME} </h3>`)
+}
+
+d3.json(torontoHoods).then(function(data) {
   console.log(data);
-  L.geoJson(data, {
-    onEachFeature: function(feature, layer) {
-      layer.bindPopup(`<h3> Airport code: ${feature.properties.faa} </h3> <hr>
-      <h3> Airport name: ${feature.properties.name} </h3> `)
-    }
-  })
+  L.geoJson(data, {onEachFeature: onEachFeature, style: myStyle})
   .addTo(map);
 });
