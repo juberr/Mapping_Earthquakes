@@ -167,7 +167,7 @@ legend.onAdd = function() {
   tectonicPlates.addTo(map)
 });
 
-//making call for major earthquake geoJSON data
+// making call for major earthquake geoJSON data
 
 let majEarthquakes = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_week.geojson"
 
@@ -185,6 +185,7 @@ d3.json(majEarthquakes).then(function(data){
     };
   }
 
+  //edited getColor function for major earthquakes
   function getColor(magnitude) {
 
     if (magnitude > 5){
@@ -204,6 +205,7 @@ d3.json(majEarthquakes).then(function(data){
     }
     return magnitude * 4;
   }
+
   L.geoJson(data, {
     pointToLayer: function(feature, latlng) {
       return L.circleMarker(latlng)
