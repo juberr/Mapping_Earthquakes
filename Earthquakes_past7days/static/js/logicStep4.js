@@ -1,4 +1,3 @@
-console.log("working");
 
 let earthquakeData = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson"
 
@@ -28,7 +27,6 @@ let map = L.map('mapid', {
   layers: [streets]
 })
 
-
 let earthquakes = new L.layerGroup();
 
 let overlays = {
@@ -36,15 +34,6 @@ let overlays = {
 }
 
 L.control.layers(baseMaps, overlays).addTo(map);
-
-let myStyle = {
-  weight: 2,
-  color: "ffffa1"
-}
-
-let onEachFeature = function(feature, layer) {
-  layer.bindPopup(`<h3> Neighborhood: ${feature.properties.AREA_NAME} </h3>`)
-}
 
 function getRadius(mag) {
   if (mag === 0) {
